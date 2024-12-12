@@ -1,0 +1,80 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2024-10-26 00:04:26.360042",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "item_code",
+  "item_name",
+  "length",
+  "size_mm",
+  "size_inch",
+  "sdr",
+  "qty"
+ ],
+ "fields": [
+  {
+   "fieldname": "item_code",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Item Code",
+   "options": "Mobile  App Item"
+  },
+  {
+   "fetch_from": "item_code.size",
+   "fieldname": "size_mm",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Size (mm)",
+   "precision": "0"
+  },
+  {
+   "fetch_from": "item_code.size_inch",
+   "fieldname": "size_inch",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Size (Inches)"
+  },
+  {
+   "fetch_from": "item_code.sdr",
+   "fieldname": "sdr",
+   "fieldtype": "Data",
+   "in_list_view": 1,
+   "label": "SDR"
+  },
+  {
+   "fetch_from": "item_code.length",
+   "fieldname": "length",
+   "fieldtype": "Float",
+   "in_list_view": 1,
+   "label": "Length (m)",
+   "precision": "0"
+  },
+  {
+   "fetch_from": "item_code.item_name",
+   "fetch_if_empty": 1,
+   "fieldname": "item_name",
+   "fieldtype": "Data",
+   "label": "Item Name"
+  },
+  {
+   "fieldname": "qty",
+   "fieldtype": "Float",
+   "label": "qty"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "istable": 1,
+ "links": [],
+ "modified": "2024-12-05 23:40:36.336959",
+ "modified_by": "Administrator",
+ "module": "OzaMobile",
+ "name": "Mobile Enq Item",
+ "owner": "Administrator",
+ "permissions": [],
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "states": []
+}
