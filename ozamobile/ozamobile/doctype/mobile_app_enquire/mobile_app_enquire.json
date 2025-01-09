@@ -18,6 +18,7 @@
   "city",
   "pin_code",
   "date",
+  "mobile_number",
   "section_break_znhh",
   "comment",
   "section_break_sugx",
@@ -103,11 +104,16 @@
    "fieldname": "attachment",
    "fieldtype": "Attach",
    "label": "Attachment"
+  },
+  {
+   "fieldname": "mobile_number",
+   "fieldtype": "Data",
+   "label": "Mobile Number"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2024-12-11 23:40:17.373902",
+ "modified": "2024-12-14 00:36:45.245791",
  "modified_by": "Administrator",
  "module": "OzaMobile",
  "name": "mobile App Enquire",

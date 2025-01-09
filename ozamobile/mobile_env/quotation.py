@@ -4,7 +4,7 @@ from frappe import _
 from erpnext.utilities.product import get_price
 from frappe.utils import cstr, fmt_money
 from erpnext.accounts.utils import getdate
-from ozamobapp.mobile_env.app_utils import (
+from ozamobile.mobile_env.app_utils import (
     gen_response,
     prepare_json_data,
     get_global_defaults,
@@ -27,7 +27,6 @@ from frappe.utils import (
     fmt_money,
 )
 from erpnext.accounts.party import get_dashboard_info
-from ozamobapp.mobile_env.app import download_pdf
 
 @frappe.whitelist()
 def get_quotation_list(start=0, page_length=10, filters=None):
@@ -192,8 +191,8 @@ def get_app_item_group_list(mainGroup):
     try:
         app_main_group_list = frappe.get_list(
             "App Item Group",
-            fields=["name", "item_group", "image","description"],
-           filters={'main_group':mainGroup},
+            fields=["name", "item_group", "image","description","main_group"],
+           filters={'main_group':str(mainGroup)},
             order_by="modified desc",
         )
         gen_response(200, "App Item Group list get successfully", app_main_group_list)
@@ -203,12 +202,12 @@ def get_app_item_group_list(mainGroup):
         return exception_handel(e)
     
 @frappe.whitelist(allow_guest=True)
-def get_app_item_subgroup_list(group):
+def get_app_item_subgroup_list(group,mainGroup):
     try:
-        item_group=frappe.db.get_value("App Item Group",{"item_group":group},"name")
+        item_group=frappe.db.get_value("App Item Group",{"item_group":str(group),'main_group':str(mainGroup)},"name")
         app_main_group_list = frappe.get_list(
             "App Item Subgroup",
-            fields=["name", "sub_group", "image","description"],
+            fields=["name", "sub_group", "image","description","item_group"],
            filters={'item_group':item_group},
             order_by="modified desc",
         )
@@ -221,13 +220,16 @@ def get_app_item_subgroup_list(group):
 @frappe.whitelist(allow_guest=True)
 def get_app_item_list(subGroup):
     try:
-        sub_group=frappe.db.get_value("App Item Subgroup",{"sub_group":subGroup},"name")
+        
+        # sub_group=frappe.db.get_value("App Item Subgroup",,"name")
         app_main_group_list = frappe.get_list(
             "Mobile  App Item",
             fields=["name", "main_group", "image","item_code","item_name","length","size","size_inch","sdr","sub_group","item_group"],  # Enclosed `group` in backticks
-            filters={'sub_group':sub_group},
+            filters={'sub_group':subGroup},
             order_by="modified desc",
         )
+        for i in app_main_group_list:
+            i['sub_group']=frappe.db.get_value("App Item Subgroup",subGroup,"sub_group")
         gen_response(200, "Mobile App Item list fetched successfully", app_main_group_list)
     except frappe.PermissionError:
         return gen_response(500, "Not permitted for Mobile App Item")
@@ -268,11 +270,9 @@ def get_app_size_item_list(subGroup):
 def company():
     try:
         global_defaults = get_global_defaults()
-
         data = json.loads(
                 frappe.get_doc("Company", global_defaults.get("default_company")).as_json()
             )
-            
         company_info = {
             "name": data.get("name"),
             "owner": data.get("owner"),
